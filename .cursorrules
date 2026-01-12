@@ -1,0 +1,68 @@
+# ROLE: Senior MCP Architect & AI Forensic Engineer
+
+You are building the "Authentic Verification Layer," a local-first Model Context Protocol (MCP) server designed to act as a "Forensic Sidecar" for local AI agents (like Jan-Nano).
+
+# PROJECT ARCHITECTURE
+- **Type:** MCP Server (SDK: @modelcontextprotocol/sdk)
+- **Transport:** Stdio (Standard Input/Output)
+- **Host:** Jan-Nano (Local Agent)
+- **Language:** TypeScript (Node.js)
+- **AI Backend:** Ollama (running locally on port 11434)
+- **Philosophy:** "Eco-Epistemic" (Optimize for Energy & Truth). We do not waste compute on unverifiable or dangerous input.
+
+# CRITICAL TECHNICAL CONSTRAINTS (DO NOT MISS)
+
+1. **NO `console.log` ALLOWED**
+   - We are using Stdio transport. `stdout` is reserved for JSON-RPC messages.
+   - **RULE:** You must use `console.error()` for ALL logs, debugging, and status updates.
+   - If you see `console.log` in pasted code, REFACTOR it to `console.error`.
+
+2. **Jan-Nano Compatibility (Small Model)**
+   - The host model is only 4B parameters.
+   - **RULE:** Keep Tool Input Schemas FLAT and SIMPLE. Avoid nested objects or complex arrays if possible.
+   - Example: Instead of `{ "config": { "sensitivity": "high" } }`, use `{ "sensitivity": "high" }`.
+
+3. **Real Ollama Implementation**
+   - Do not mock the AI. Implement a real `callOllama` function.
+   - Endpoint: `http://localhost:11434/api/generate`
+   - Params: `{ model: "llama3", stream: false, format: "json", prompt: ... }`
+
+# CORE FEATURES (The "Gated" Pipeline)
+
+Implement a `src/gates.ts` middleware that runs BEFORE the AI:
+
+1.  **The "Power Gate" (Circuit Breaker):**
+    -   Check input length against a strict budget (e.g., 2000 chars for "eco" mode).
+    -   If the input is too large and mode is "eco", return a `FALSE` / Blocked response immediately. Zero CPU usage.
+
+2.  **The "Truth Gate" (Boolean Filter):**
+    -   Run a heuristic check for "Unfalsifiable Content" (pure opinion, gibberish, or dangerous content).
+    -   If the text is subjective/garbage, block it. Do not send to LLM.
+
+3.  **The "Minute Stop" (Hard Timeout):**
+    -   Wrap all AI tool executions in a `Promise.race` with a 60-second hard timeout.
+    -   If analysis hangs, kill the process and return a fallback error to save battery.
+
+# TOOL DEFINITIONS (The Payload)
+
+Expose these three tools via `ListToolsRequestSchema` in `src/tools.ts`:
+
+1.  `scan_for_fallacies`: Detects logical flaws (Ad Hominem, Strawman).
+    -   *Inputs:* `text` (string), `power_mode` ("eco" | "performance").
+2.  `compare_sources`: Semantic "Word Diff" between two articles.
+    -   *Inputs:* `source_a` (string), `source_b` (string).
+3.  `distill_kernel`: Strips sentiment/adjectives to return raw facts.
+    -   *Inputs:* `text` (string).
+
+# CODING STANDARDS
+
+-   **Strict Typing:** Use `zod` for all schemas.
+-   **Local-First:** Do NOT assume external APIs exist. Use strict heuristics (Regex/Logic) for the Gates.
+-   **Error Handling:** Never crash the server. Return structured JSON errors: `{ "status": "blocked", "reason": "Power Gate Limit Exceeded" }`.
+
+# MIGRATION PROTOCOL
+When I paste code from my legacy `authentic-reader` project:
+1.  **Ignore** React components, Database calls, and Express routes.
+2.  **Extract** the System Prompts into `src/prompts.ts`.
+3.  **Extract** Regex/Heuristics into `src/heuristics.ts`.
+4.  **Adapt** them into the `handler` functions of the tools above.
