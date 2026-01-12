@@ -1,0 +1,33 @@
+{
+  "comment": "Minimal configurations to try with Jan",
+  
+  "minimal1_direct_path": {
+    "authentic-verification-layer": "/home/robwistrand/authentic-mcp-server/src/index.js"
+  },
+  
+  "minimal2_with_command": {
+    "authentic-verification-layer": {
+      "command": "/usr/bin/node /home/robwistrand/authentic-mcp-server/src/index.js"
+    }
+  },
+  
+  "minimal3_using_error_name": {
+    "AuthenticVerifier": {
+      "command": "node",
+      "args": ["/home/robwistrand/authentic-mcp-server/src/index.js"]
+    }
+  },
+  
+  "minimal4_executable_field": {
+    "authentic-verification-layer": {
+      "executable": "/usr/bin/node",
+      "arguments": ["/home/robwistrand/authentic-mcp-server/src/index.js"]
+    }
+  },
+  
+  "minimal5_shell_script": {
+    "authentic-verification-layer": {
+      "command": "/home/robwistrand/authentic-mcp-server/run-server.sh"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 /**
  * TOOLS - Tool Definitions and Handlers
- * Wires together Prompts + Heuristics + Ollama for MCP tools
+ * Wires together Prompts + Heuristics + Groq (cloud) for MCP tools
  */
 
-import { callOllama } from "./ollama.js";
+import { callGroq as callOllama } from "./groq.js"; // Alias for compatibility
 import {
   ANALYSIS_SYSTEM_PROMPT,
   COMPARISON_SYSTEM_PROMPT,
@@ -106,7 +106,7 @@ export async function scanForFallacies(text: string): Promise<unknown> {
   return {
     heuristic_matches: heuristicMatches,
     ai_analysis: aiAnalysis,
-    verification_engine: "local-llama3",
+    verification_engine: "groq-llama3.3",
   };
 }
 

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "test-server": {
+      "command": "node",
+      "args": ["--version"],
+      "env": {}
+    }
+  }
+}

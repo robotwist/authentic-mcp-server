@@ -1,0 +1,44 @@
+{
+  "comment": "Try these different configuration formats for Jan",
+  
+  "variant1_array_args": {
+    "mcpServers": {
+      "authentic-verification-layer": {
+        "command": "node",
+        "args": ["/home/robwistrand/authentic-mcp-server/src/index.js"],
+        "env": {}
+      }
+    }
+  },
+  
+  "variant2_string_command": {
+    "mcpServers": {
+      "authentic-verification-layer": {
+        "command": "node /home/robwistrand/authentic-mcp-server/src/index.js",
+        "args": [],
+        "env": {}
+      }
+    }
+  },
+  
+  "variant3_no_args": {
+    "mcpServers": {
+      "authentic-verification-layer": {
+        "command": "node",
+        "env": {
+          "SCRIPT_PATH": "/home/robwistrand/authentic-mcp-server/src/index.js"
+        }
+      }
+    }
+  },
+  
+  "variant4_absolute_path": {
+    "mcpServers": {
+      "authentic-verification-layer": {
+        "command": "/usr/bin/node",
+        "args": ["/home/robwistrand/authentic-mcp-server/src/index.js"],
+        "env": {}
+      }
+    }
+  }
+}

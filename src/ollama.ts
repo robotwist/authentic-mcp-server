@@ -25,13 +25,13 @@ export interface OllamaRequestParams {
  * Calls the local Ollama API with a prompt and returns the JSON response
  * 
  * @param prompt - The prompt to send to Ollama
- * @param model - The model to use (default: "llama3")
+ * @param model - The model to use (default: "llama3:latest")
  * @returns Promise<OllamaResponse> - The AI response and duration
  * @throws Error if connection fails or request times out
  */
 export async function callOllama(
   prompt: string,
-  model: string = "llama3"
+  model: string = "llama3:latest"
 ): Promise<OllamaResponse> {
   const startTime = Date.now();
   const abortController = new AbortController();

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "authentic-verification-layer": {
+      "command": "/home/robwistrand/authentic-mcp-server/run-server.sh",
+      "args": [],
+      "env": {}
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "authentic-verification-layer": {
+      "command": "node",
+      "args": ["/home/robwistrand/authentic-mcp-server/src/index.js"],
+      "env": {}
+    }
+  }
+}
